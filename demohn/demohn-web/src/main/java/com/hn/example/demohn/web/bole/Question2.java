@@ -28,8 +28,6 @@ public class Question2 {
             if (!sortedMap.containsKey(arr[i])){
                 sortedMap.put(arr[i],count);
             }
-
-
         }
         sort(sortedMap);
 
