@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.hyperic:sigar:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/hyperic/sigar/unknown/sigar-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/hyperic/sigar/unknown/sigar-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/hyperic/sigar/unknown/sigar-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
