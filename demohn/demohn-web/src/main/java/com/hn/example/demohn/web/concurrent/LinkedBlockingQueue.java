@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @Author: liyb
  * @Date: 2019/9/18
- * @description
+ * @description 基于链表实现阻塞队列
  */
 public class LinkedBlockingQueue<E> {
     private static AtomicInteger count = new AtomicInteger();
