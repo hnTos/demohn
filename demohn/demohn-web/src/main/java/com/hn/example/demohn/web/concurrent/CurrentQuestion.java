@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 /**
  * @Author: liyb
  * @Date: 2019/7/1
- * @description
+ * @description 多线程顺序输出0~100
  */
 public class CurrentQuestion {
 
