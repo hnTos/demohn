@@ -45,6 +45,7 @@ public class TestHarnessLatch {
         long end = System.nanoTime();
         return end -start;
     }
+    
     public static void main(String []args){
         TestHarnessLatch th = new TestHarnessLatch();
         long time = 0;
