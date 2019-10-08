@@ -23,7 +23,6 @@ public class ArrayBlockingQueue<E> {
         FULL=lock.newCondition();
     }
     class Node{
-
     }
     public ArrayBlockingQueue(){
         this(defaultSize);
