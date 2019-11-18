@@ -67,6 +67,20 @@ public class CurrentQuestion {
         /**
         * 使用AtomicInteger
         */
+        private void run2(){
+                while (nums.get()<=100) {
+                    Integer next = nums.get();
+
+                    if (next% 4 == order) {
+                        System.out.println("线程:"+nums.intValue());
+                        nums.incrementAndGet();
+                    }
+
+                }
+    }
+        /**
+        * 使用lock
+        */
         private void run3(){
                 lock.lock();
                 while (total<=100) {
@@ -86,20 +100,6 @@ public class CurrentQuestion {
                 lock.unlock();
 
         }
-        /**
-        * 使用lock
-        */
-        private void run2(){
-                while (nums.get()<=100) {
-                    Integer next = nums.get();
-
-                    if (next% 4 == order) {
-                        System.out.println("线程:"+nums.intValue());
-                        nums.incrementAndGet();
-                    }
-
-                }
-    }
 
     public static void main(String[] args) {
         ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("多线程有序打印出0~100的线程池").build();
