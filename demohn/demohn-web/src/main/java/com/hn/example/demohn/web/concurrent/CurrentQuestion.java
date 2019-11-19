@@ -53,7 +53,7 @@ public class CurrentQuestion {
 
     public static void main(String[] args) {
         ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("多线程有序打印出0~100的线程池").build();
-        ExecutorService pool = new ThreadPoolExecutor(3,5,100, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(1024),factory,new ThreadPoolExecutor.AbortPolicy());
+        ExecutorService pool = new ThreadPoolExecutor(3,5,100, TimeUnit.MILLISECONDS, (BlockingQueue<Runnable>) new LinkedBlockingQueue<Runnable>(1024),factory,new ThreadPoolExecutor.AbortPolicy());
         CurrentQuestion question = new CurrentQuestion();
         pool.execute(question.new Mythread1("Thread A", 1));
         pool.execute(question.new Mythread1("Thread B", 2));

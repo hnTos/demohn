@@ -7,14 +7,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class QuestionOneThread extends Thread {
     private static AtomicInteger nums = new AtomicInteger(0);
-
-    private static ThreadLocal<Integer> local =new ThreadLocal<Integer>(){
-        @Override
-        protected Integer initialValue() {
-
-            return 0;
-        }
-    };
     private String str;
     private Integer order;
 
@@ -33,17 +25,12 @@ public class QuestionOneThread extends Thread {
 
     @Override
     public void run() {
-        run3();
+        run2();
     }
     private void run2(){
-        while (nums.get()<100) {
-            Integer next = nums.get();
-
-            if (next% 4 == order) {
-                if (next%4==0) {
-                    System.out.println("线程"+nums.intValue());
-                }
-                System.out.print(str);
+        while (nums.get()<=100) {
+            if (nums.get()% 4 == order) {
+                System.out.println("线程:"+nums.intValue());
                 nums.incrementAndGet();
             }
 
@@ -67,33 +54,23 @@ public class QuestionOneThread extends Thread {
         }
     }
 
-    /**
-     * 做不到递增输出
-     */
     private void run3(){
-       // System.out.println("线程"+str+"："+"trylock");
-
-            if (lock.tryLock()) {
-                while (total<=100) {
-                    if (total%4== order) {
-                       System.out.println("线程"+str+"："+total);
-                        total++;
-                        condition.signalAll();
-                    } else {
-                        try {
-                           // System.out.println("线程"+str+"："+"await");
-                            condition.await();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
+        lock.lock();
+        while (total<=100) {
+            if (total%4== order) {
+                System.out.println("线程"+str+"："+total);
+                total++;
+                condition.signalAll();
+            } else {
+                try {
+                    condition.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                lock.unlock();
-
-            }else {
-               // System.out.println("线程"+str+"："+"trylock fail");
             }
+
+        }
+        lock.unlock();
 
     }
 }
