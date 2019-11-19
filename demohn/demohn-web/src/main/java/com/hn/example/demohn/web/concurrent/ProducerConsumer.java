@@ -2,7 +2,10 @@ package com.hn.example.demohn.web.concurrent;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-
+/**
+* @author liyb
+* @description 基于synchronized的生产者消费者简单实现
+*/
 public class ProducerConsumer {
     private static Integer count = 0;
     private final Integer  FULL  = 10;

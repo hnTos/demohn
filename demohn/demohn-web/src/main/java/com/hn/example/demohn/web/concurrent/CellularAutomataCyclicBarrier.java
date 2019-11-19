@@ -60,7 +60,6 @@ public class CellularAutomataCyclicBarrier {
             new Thread(workers[i]).start();
         mainBoard.waitForConvergence();
     }
-
     interface Board {
         int getMaxX();
         int getMaxY();

@@ -7,7 +7,7 @@ import java.util.concurrent.FutureTask;
 /**
  * @Author: liyb
  * @Date: 2019/9/18
- * @description
+ * @description future使用demo
  */
 public class PreLoaderFutureTask {
     private final FutureTask<Long> future = new FutureTask(new Callable<Long>(){

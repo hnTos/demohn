@@ -7,13 +7,19 @@ import java.util.concurrent.*;
 /**
  * @Author: liyb
  * @Date: 2019/7/1
- * @description
+ * @description 多线程顺序输出0~100
  */
 public class CurrentQuestion {
 
-        private static Integer numsB = 1;
-
         private static String LOCK = "lock";
+        
+        private static Integer total =0;
+
+        private static Lock lock = new ReentrantLock();
+
+        private static Condition condition = lock.newCondition();
+        
+        private static AtomicInteger nums = new AtomicInteger(0);
 
        class Mythread1 implements Runnable{
             /**
@@ -24,6 +30,8 @@ public class CurrentQuestion {
              * 次序
              */
             private Integer order;
+            
+ 
 
             public Mythread1(String name,Integer order) {
                 this.name = name;
@@ -32,24 +40,66 @@ public class CurrentQuestion {
 
             @Override
             public void run(){
+                run1();
+            }
+       }
+        /**
+        * 使用synchronized
+        */
+         private void run1(){
                 synchronized (LOCK){
-                    while(numsB<=100) {
-                        if(numsB %3 != order){
+                    while (total<=100) {
+                        if (total%4 == order) {
+                            System.out.println("线程"+str+"："+total);
+                            total++;
+                            LOCK.notifyAll();
+                        } else  {
                             try {
                                 LOCK.wait();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                        } else {
-                            System.out.println(name+":"+numsB);
-                            numsB++;
-                            LOCK.notifyAll();
                         }
                     }
                 }
+          }
+        
+        /**
+        * 使用AtomicInteger
+        */
+        private void run2(){
+                while (nums.get()<=100) {
+                    Integer next = nums.get();
 
-            }
-       }
+                    if (next% 4 == order) {
+                        System.out.println("线程:"+nums.intValue());
+                        nums.incrementAndGet();
+                    }
+
+                }
+    }
+        /**
+        * 使用lock
+        */
+        private void run3(){
+                lock.lock();
+                while (total<=100) {
+                    if (total%4== order) {
+                        System.out.println("线程"+str+"："+total);
+                        total++;
+                        condition.signalAll();
+                    } else {
+                        try {
+                            condition.await();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+                lock.unlock();
+
+        }
 
     public static void main(String[] args) {
         ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("多线程有序打印出0~100的线程池").build();
