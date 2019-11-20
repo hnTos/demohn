@@ -41,8 +41,8 @@ public class Question2 {
                 return (o2.getValue()-o1.getValue());
             }
         });*/
-        //counts.sort((arg0, arg1)->{return arg1.getValue().compareTo(arg0.getValue());});
-        counts.stream().sorted((arg0, arg1)->{return arg1.getValue().compareTo(arg0.getValue());});
+        // 上面也可以实现
+        counts.sort((arg0, arg1)->{return arg1.getValue().compareTo(arg0.getValue());});
         counts.forEach(entry->System.out.println(entry.getKey()+"…………"+entry.getValue()));
     }
 }
