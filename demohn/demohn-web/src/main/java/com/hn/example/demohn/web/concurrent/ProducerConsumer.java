@@ -1,5 +1,9 @@
 package com.hn.example.demohn.web.concurrent;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 /**
@@ -144,11 +148,12 @@ public class ProducerConsumer {
 
     public static void main(String[] args) throws Exception {
         ProducerConsumer producerConsumer = new ProducerConsumer();
+        ExecutorService pool = new ThreadPoolExecutor(5,8,1000, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<>(500),new ThreadPoolExecutor.AbortPolicy());
         for (Integer i=0;i<4;++i)     {
-            new Thread(producerConsumer.new Producer()).start();
+            pool.execute(producerConsumer.new Producer());
         }
         for (Integer i=0;i<2;++i)     {
-            new Thread(producerConsumer.new Consumer()).start();
+            pool.execute(producerConsumer.new Consumer());
         }
 
        /* new Thread(producerConsumer.new Consumer()).start();
