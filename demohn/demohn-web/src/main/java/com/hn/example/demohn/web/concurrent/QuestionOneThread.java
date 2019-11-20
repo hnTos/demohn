@@ -24,53 +24,48 @@ public class QuestionOneThread extends Thread {
     }
 
     @Override
-    public void run() {
-        run2();
+    public void run()  {
+        try {
+            run3();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void run1() throws InterruptedException{
+        synchronized (LOCK) {
+            while (total<=100) {
+                if (total%4 != order) {
+                    LOCK.wait();
+                } else {
+                    System.out.println("run1==>线程"+str+"："+total);
+                    total++;
+                    LOCK.notifyAll();
+                }
+
+            }
+        }
     }
     private void run2(){
         while (nums.get()<=100) {
             if (nums.get()% 4 == order) {
-                System.out.println("线程:"+nums.intValue());
+                System.out.println("run2==>线程:"+nums.intValue());
                 nums.incrementAndGet();
             }
-
         }
     }
-    private void run1(){
-        synchronized (LOCK){
-            while (total<=100) {
-                if (total%4 == order) {
-                    System.out.println("线程"+str+"："+total);
-                    total++;
-                    LOCK.notifyAll();
-                } else  {
-                    try {
-                        LOCK.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
-    private void run3(){
+    private void run3() throws InterruptedException{
         lock.lock();
         while (total<=100) {
-            if (total%4== order) {
-                System.out.println("线程"+str+"："+total);
+            if (total%4 != order) {
+                condition.await();
+            } else {
+                System.out.println("run3==>线程"+str+"："+total);
                 total++;
                 condition.signalAll();
-            } else {
-                try {
-                    condition.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
 
         }
         lock.unlock();
-
     }
 }

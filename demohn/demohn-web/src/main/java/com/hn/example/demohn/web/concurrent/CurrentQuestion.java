@@ -3,6 +3,10 @@ package com.hn.example.demohn.web.concurrent;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Author: liyb
@@ -11,99 +15,117 @@ import java.util.concurrent.*;
  */
 public class CurrentQuestion {
 
-        private static String LOCK = "lock";
-        
-        private static Integer total =0;
+    private static String LOCK = "lock";
 
-        private static Lock lock = new ReentrantLock();
+    private static Integer total = 0;
 
-        private static Condition condition = lock.newCondition();
-        
-        private static AtomicInteger nums = new AtomicInteger(0);
+    private static Lock lock = new ReentrantLock();
 
-       class Mythread1 implements Runnable{
-            /**
-             * 线程名
-             */
-            private String name;
-            /**
-             * 次序
-             */
-            private Integer order;
-            
- 
+    private static Condition condition = lock.newCondition();
 
-            public Mythread1(String name,Integer order) {
-                this.name = name;
-                this.order = order;
-            }
+    private static AtomicInteger nums = new AtomicInteger(0);
 
-            @Override
-            public void run(){
-                run1();
-            }
-       }
+    class Mythread1 implements Runnable {
         /**
-        * 使用synchronized
-        */
-         private void run1(){
-                synchronized (LOCK){
-                    while (total<=100) {
-                        if (total%4 == order) {
-                            System.out.println("线程"+str+"："+total);
-                            total++;
-                            LOCK.notifyAll();
-                        } else  {
-                            try {
-                                LOCK.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-          }
-        
+         * 线程名
+         */
+        private String name;
         /**
-        * 使用AtomicInteger
-        */
-        private void run2(){
-                while (nums.get()<=100) {
-                    Integer next = nums.get();
+         * 次序
+         */
+        private Integer order;
 
-                    if (next% 4 == order) {
-                        System.out.println("线程:"+nums.intValue());
-                        nums.incrementAndGet();
-                    }
+        private Integer total;
 
-                }
-    }
+
+        public Mythread1(String name, Integer order) {
+            this.name = name;
+            this.order = order;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Integer getOrder() {
+            return order;
+        }
+
+        public void setOrder(Integer order) {
+            this.order = order;
+        }
+
+        @Override
+        public void run() {
+            run3();
+        }
+
         /**
-        * 使用lock
-        */
-        private void run3(){
-                lock.lock();
-                while (total<=100) {
-                    if (total%4== order) {
-                        System.out.println("线程"+str+"："+total);
+         * 使用synchronized
+         */
+        private void run1() {
+            synchronized (LOCK) {
+                while (total <= 100) {
+                    if (total % total == order) {
+                        System.out.println("线程" + name + "：" + total);
                         total++;
-                        condition.signalAll();
+                        LOCK.notifyAll();
                     } else {
                         try {
-                            condition.await();
+                            LOCK.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-
                 }
-                lock.unlock();
+            }
+        }
+
+        /**
+         * 使用AtomicInteger
+         */
+        private void run2() {
+            while (nums.get() <= 100) {
+                Integer next = nums.get();
+                if (next % total == order) {
+                    System.out.println("线程:" + nums.intValue());
+                    nums.incrementAndGet();
+                }
+
+            }
+        }
+
+        /**
+         * 使用lock
+         */
+        private void run3() {
+            lock.lock();
+            while (total <= 100) {
+                if (total % total == order) {
+                    System.out.println("线程" + getName() + "：" + total);
+                    total++;
+                    condition.signalAll();
+                } else {
+                    try {
+                        condition.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+            lock.unlock();
 
         }
 
+    }
     public static void main(String[] args) {
         ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("多线程有序打印出0~100的线程池").build();
-        ExecutorService pool = new ThreadPoolExecutor(3,5,100, TimeUnit.MILLISECONDS, (BlockingQueue<Runnable>) new LinkedBlockingQueue<Runnable>(1024),factory,new ThreadPoolExecutor.AbortPolicy());
+        ExecutorService pool = new ThreadPoolExecutor(3, 5, 100, TimeUnit.MILLISECONDS, (BlockingQueue<Runnable>) new LinkedBlockingQueue<Runnable>(1024), factory, new ThreadPoolExecutor.AbortPolicy());
         CurrentQuestion question = new CurrentQuestion();
         pool.execute(question.new Mythread1("Thread A", 1));
         pool.execute(question.new Mythread1("Thread B", 2));
