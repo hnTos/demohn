@@ -130,10 +130,19 @@ public class CurrentQuestion {
         pool.execute(question.new Mythread1("Thread A", 1));
         pool.execute(question.new Mythread1("Thread B", 2));
         pool.execute(question.new Mythread1("Thread C", 0));
+        pool.shutdown();
         try {
-            pool.shutdown();
-        } catch (Exception e) {
-
+            // 等待 60 s
+            if (!Pool.awaitTermination(60, TimeUnit.SECONDS)) {
+                // 调用 shutdownNow 取消正在执行的任务
+                pool.shutdownNow();
+                // 再次等待 60 s，如果还未结束，可以再次尝试，或者直接放弃
+                if (!pool.awaitTermination(60, TimeUnit.SECONDS))
+                    System.err.println("线程池任务未正常执行结束");
+            }
+        } catch (InterruptedException ie) {
+            // 重新调用 shutdownNow
+            pool.shutdownNow();
         }
 
     }
