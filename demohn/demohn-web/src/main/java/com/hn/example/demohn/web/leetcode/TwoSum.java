@@ -1,3 +1,8 @@
+package com.hn.example.demohn.web.leetcode;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class TwoSum {
     public int[] twoSum(int[] num,int target) {
         Map<Integer,Integer> cache = new HashMap<>();
@@ -6,7 +11,7 @@ public class TwoSum {
         }
         for (int i=0;i<num.length;++i) {
             if (cache.containsKey(target - num[i])) {
-                return new int[]{cache.get(num[i],i)};
+                return new int[]{cache.get(num[i]),i};
             }
             cache.put(num[i],i);
         }
