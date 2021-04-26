@@ -1,3 +1,8 @@
+package com.hn.example.demohn.web.leetcode;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class LRUCache {
 
     private LinkedHashMap<Integer,Integer> cache;
