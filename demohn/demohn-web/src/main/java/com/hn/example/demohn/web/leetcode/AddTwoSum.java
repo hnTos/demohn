@@ -9,6 +9,7 @@ package com.hn.example.demohn.web.leetcode;
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
+
 public class AddTwoSum {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode pre = new ListNode(0);
@@ -33,5 +34,13 @@ public class AddTwoSum {
             cur.next = new ListNode(carry);
         }
         return pre.next;
+    }
+
+    class ListNode {
+       int val;
+       ListNode next;
+       ListNode() {}
+       ListNode(int val) { this.val = val; }
+       ListNode(int val, ListNode next) { this.val = val; this.next = next; }
     }
 }
